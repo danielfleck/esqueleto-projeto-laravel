@@ -237,6 +237,9 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 # RUN curl -sS https://get.symfony.com/cli/installer | bash \
 #     && mv /root/.symfony5/bin/symfony /usr/local/bin/symfony
 
+## INCLUIR LARAVEL CLI
+# RUN composer global require laravel/installer
+
 ### INCLUIR AQUI OS MÓDULOS DO PHP REQUERIDOS NO AMBIENTE DE DESENVOLVIMENTO
 
 ### Módulo dl_test # RUN /bin/sh "/modulos-php/dl_test"

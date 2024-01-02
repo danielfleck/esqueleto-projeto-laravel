@@ -1,0 +1,25 @@
+export DEBIAN_FRONTEND=noninteractive \
+    && set -eux \
+    && apt-get update --no-allow-insecure-repositories \
+    && apt-get install --assume-yes wget unzip libaio1 libaio-dev \
+    && [ -d /opt/oracle ] || mkdir /opt/oracle \
+    && cd /opt/oracle \
+    && wget https://download.oracle.com/otn_software/linux/instantclient/217000/instantclient-basic-linux.x64-21.7.0.0.0dbru.zip \
+    && test $( cksum instantclient-basic-linux.x64-21.7.0.0.0dbru.zip | cut -d" " -f1 ) = "567317895" \
+    && wget https://download.oracle.com/otn_software/linux/instantclient/217000/instantclient-sdk-linux.x64-21.7.0.0.0dbru.zip \
+    && test $( cksum instantclient-sdk-linux.x64-21.7.0.0.0dbru.zip | cut -d" " -f1 ) = "1987713384" \
+    && unzip /opt/oracle/instantclient-basic-linux.x64-21.7.0.0.0dbru.zip -d /opt/oracle \
+    && unzip /opt/oracle/instantclient-sdk-linux.x64-21.7.0.0.0dbru.zip -d /opt/oracle \
+    && rm -rf /opt/oracle/*.zip \
+    && [ -f /opt/oracle/instantclient_21_7/libclntsh.so ] || ln -s /opt/oracle/instantclient_21_7/libclntsh.so.21.7 /opt/oracle/instantclient_21_7/libclntsh.so \
+    && [ -f /opt/oracle/instantclient_21_7/libclntshcore.so ] || ln -s /opt/oracle/instantclient_21_7/libclntshcore.so.21.7 /opt/oracle/instantclient_21_7/libclntshcore.so \
+    && [ -f /opt/oracle/instantclient_21_7/libocci.so ] || ln -s /opt/oracle/instantclient_21_7/libocci.so.21.7 /opt/oracle/instantclient_21_7/libocci.so \
+    && [ -f /lib/x86_64-linux-gnu/libnnz21.so ] || ln -s /opt/oracle/instantclient_21_7/libnnz21.so /lib/x86_64-linux-gnu/libnnz21.so \
+    && [ -f /lib/x86_64-linux-gnu/libclntshcore.so.21.1 ] || ln -s /opt/oracle/instantclient_21_7/libclntshcore.so.21.1 /lib/x86_64-linux-gnu/libclntshcore.so.21.1 \
+    && echo /opt/oracle/instantclient_21_7 > /etc/ld.so.conf.d/oracle.conf \
+    && ldconfig \
+    && docker-php-ext-configure oci8 --with-oci8=shared,instantclient,/opt/oracle/instantclient_21_7,21.7 \
+    && docker-php-ext-install -j$(nproc) oci8 \
+    && apt-get --assume-yes autoremove \
+    && apt-get clean \
+    && rm -r /var/lib/apt/lists/*

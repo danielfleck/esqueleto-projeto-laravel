@@ -1,0 +1,12 @@
+export DEBIAN_FRONTEND=noninteractive \
+    && set -eux \
+    && apt-get update --no-allow-insecure-repositories \
+    && apt-get install --assume-yes libsodium-dev \
+    && docker-php-source extract \
+    && mkdir -p /usr/src/php/ext/redis \
+    && curl -fsSL https://pecl.php.net/get/redis-5.3.7.tgz | tar xvz -C /usr/src/php/ext/redis --strip 1 \
+    && docker-php-ext-install -j$(nproc) redis \
+    && docker-php-source delete \
+    && apt-get --assume-yes autoremove \
+    && apt-get clean \
+    && rm -r /var/lib/apt/lists/*

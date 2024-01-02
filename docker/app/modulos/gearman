@@ -1,0 +1,12 @@
+export DEBIAN_FRONTEND=noninteractive \
+    && set -eux \
+    && apt-get update --no-allow-insecure-repositories \
+    && apt-get install --assume-yes libgearman-dev \
+    && docker-php-source extract \
+    && mkdir -p /usr/src/php/ext/gearman \
+    && curl -fsSL https://pecl.php.net/get/gearman-2.1.0.tgz | tar xvz -C /usr/src/php/ext/gearman --strip 1 \
+    && docker-php-ext-install -j$(nproc) gearman \
+    && docker-php-source delete \
+    && apt-get --assume-yes autoremove \
+    && apt-get clean \
+    && rm -r /var/lib/apt/lists/*

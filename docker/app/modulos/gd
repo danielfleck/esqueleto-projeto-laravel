@@ -1,0 +1,12 @@
+export DEBIAN_FRONTEND=noninteractive \
+    && set -eux \
+    && apt-get update --no-allow-insecure-repositories \
+    && apt-get install --assume-yes libfreetype6-dev libjpeg62-turbo-dev libpnglite-dev \
+        libpng-dev libwebp-dev libxpm-dev libfreetype6-dev zlib1g-dev \
+        libxml2-dev libavif-dev \
+    && docker-php-ext-configure gd --enable-gd --with-avif --with-freetype --with-webp \
+                                   --with-jpeg --with-xpm  \
+    && docker-php-ext-install -j$(nproc) gd \
+    && apt-get --assume-yes autoremove \
+    && apt-get clean \
+    && rm -r /var/lib/apt/lists/*

@@ -1,0 +1,11 @@
+export DEBIAN_FRONTEND=noninteractive \
+    && set -eux \
+    && apt-get update --no-allow-insecure-repositories \
+    && docker-php-source extract \
+    && mkdir -p /usr/src/php/ext/xdebug \
+    && curl -fsSL https://pecl.php.net/get/xdebug-3.2.0alpha2.tgz | tar xvz -C /usr/src/php/ext/xdebug --strip 1 \
+    && docker-php-ext-install -j$(nproc) xdebug \
+    && docker-php-source delete \
+    && apt-get --assume-yes autoremove \
+    && apt-get clean \
+    && rm -r /var/lib/apt/lists/*

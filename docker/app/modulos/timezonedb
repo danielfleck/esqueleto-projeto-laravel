@@ -1,0 +1,11 @@
+export DEBIAN_FRONTEND=noninteractive \
+    && set -eux \
+    && apt-get update --no-allow-insecure-repositories \
+    && docker-php-source extract \
+    && mkdir -p /usr/src/php/ext/timezonedb \
+    && curl -fsSL https://pecl.php.net/get/timezonedb-2022.2.tgz | tar xvz -C /usr/src/php/ext/timezonedb --strip 1 \
+    && docker-php-ext-install -j$(nproc) timezonedb \
+    && docker-php-source delete \
+    && apt-get --assume-yes autoremove \
+    && apt-get clean \
+    && rm -r /var/lib/apt/lists/*

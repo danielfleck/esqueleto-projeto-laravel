@@ -1,0 +1,8 @@
+## postgis
+RUN export DEBIAN_FRONTEND=noninteractive \
+    && set -eux \
+    && apt-get update --no-allow-insecure-repositories \
+    && apt-get install --assume-yes postgresql-14-postgis-3 \
+    && apt-get --assume-yes autoremove \
+    && apt-get clean \
+    && rm -r /var/lib/apt/lists/*

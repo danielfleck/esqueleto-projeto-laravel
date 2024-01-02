@@ -1,0 +1,4 @@
+docker-php-source extract 
+docker-php-ext-configure pcre
+docker-php-ext-install -j$(nproc) pcre
+docker-php-source delete

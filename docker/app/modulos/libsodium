@@ -1,0 +1,12 @@
+export DEBIAN_FRONTEND=noninteractive \
+    && set -eux \
+    && apt-get update --no-allow-insecure-repositories \
+    && apt-get install --assume-yes libsodium-dev \
+    && docker-php-source extract \
+    && mkdir -p /usr/src/php/ext/libsodium \
+    && curl -fsSL https://pecl.php.net/get/libsodium-2.0.23.tgz | tar xvz -C /usr/src/php/ext/libsodium --strip 1 \
+    && docker-php-ext-install -j$(nproc) libsodium \
+    && docker-php-source delete \
+    && apt-get --assume-yes autoremove \
+    && apt-get clean \
+    && rm -r /var/lib/apt/lists/*

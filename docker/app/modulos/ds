@@ -1,0 +1,13 @@
+export DEBIAN_FRONTEND=noninteractive \
+    && set -eux \
+    && apt-get update --no-allow-insecure-repositories \
+    && apt-get install --assume-yes libfann-dev git \
+    && docker-php-source extract \
+    && mkdir -p /usr/src/php/ext/ds \
+    && curl -fsSL https://pecl.php.net/get/ds-1.4.0.tgz | tar xvz -C /usr/src/php/ext/ds --strip 1 \
+    && docker-php-ext-configure ds \
+    && docker-php-ext-install -j$(nproc) ds \
+    && docker-php-source delete \
+    && apt-get --assume-yes autoremove \
+    && apt-get clean \
+    && rm -r /var/lib/apt/lists/*

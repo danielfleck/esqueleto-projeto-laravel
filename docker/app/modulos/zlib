@@ -1,0 +1,5 @@
+docker-php-source extract 
+docker-php-ext-configure zlib
+docker-php-ext-install -j$(nproc) zlib
+docker-php-source delete
+

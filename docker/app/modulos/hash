@@ -1,0 +1,4 @@
+docker-php-source extract 
+docker-php-ext-configure hash
+docker-php-ext-install -j$(nproc) hash
+docker-php-source delete

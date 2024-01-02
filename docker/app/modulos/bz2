@@ -1,0 +1,8 @@
+export DEBIAN_FRONTEND=noninteractive \
+    && set -eux \
+    && apt-get update --no-allow-insecure-repositories \
+    && apt-get install -y lbzip2 bzip2 libbz2-dev \
+    && docker-php-ext-install -j$(nproc) bz2 \
+    && apt-get --assume-yes autoremove \
+    && apt-get clean \
+    && rm -r /var/lib/apt/lists/*

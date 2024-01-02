@@ -1,0 +1,13 @@
+export DEBIAN_FRONTEND=noninteractive \
+    && set -eux \
+    && apt-get update --no-allow-insecure-repositories \
+    && apt-get install --assume-yes libfann-dev git \
+    && docker-php-source extract \
+    && mkdir -p /usr/src/php/ext/fann \
+    && curl -fsSL https://pecl.php.net/get/fann-1.2.0RC2.tgz | tar xvz -C /usr/src/php/ext/fann --strip 1 \
+    && docker-php-ext-configure fann --with-fann \
+    && docker-php-ext-install -j$(nproc) fann \
+    && docker-php-source delete \
+    && apt-get --assume-yes autoremove \
+    && apt-get clean \
+    && rm -r /var/lib/apt/lists/*

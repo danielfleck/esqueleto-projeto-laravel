@@ -1,0 +1,12 @@
+export DEBIAN_FRONTEND=noninteractive \
+    && set -eux \
+    && apt-get update --no-allow-insecure-repositories \
+    && apt-get install --assume-yes libyaml-dev \
+    && docker-php-source extract \
+    && mkdir -p /usr/src/php/ext/yaml \
+    && curl -fsSL https://pecl.php.net/get/yaml-2.2.2.tgz | tar xvz -C /usr/src/php/ext/yaml --strip 1 \
+    && docker-php-ext-install -j$(nproc) yaml \
+    && docker-php-source delete \
+    && apt-get --assume-yes autoremove \
+    && apt-get clean \
+    && rm -r /var/lib/apt/lists/*

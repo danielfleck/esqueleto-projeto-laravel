@@ -1,0 +1,11 @@
+export DEBIAN_FRONTEND=noninteractive \
+    && set -eux \
+    && apt-get update --no-allow-insecure-repositories \
+    && docker-php-source extract \
+    && mkdir -p /usr/src/php/ext/ast \
+    && curl -fsSL https://pecl.php.net/get/ast-1.1.0.tgz | tar xvz -C /usr/src/php/ext/ast --strip 1 \
+    && docker-php-ext-install -j$(nproc) ast \
+    && docker-php-source delete \
+    && apt-get --assume-yes autoremove \
+    && apt-get clean \
+    && rm -r /var/lib/apt/lists/*

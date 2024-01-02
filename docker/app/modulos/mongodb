@@ -1,0 +1,11 @@
+export DEBIAN_FRONTEND=noninteractive \
+    && set -eux \
+    && apt-get update --no-allow-insecure-repositories \
+    && docker-php-source extract \
+    && mkdir -p /usr/src/php/ext/mongodb \
+    && curl -fsSL https://pecl.php.net/get/mongodb-1.14.0.tgz | tar xvz -C /usr/src/php/ext/mongodb --strip 1 \
+    && docker-php-ext-install -j$(nproc) mongodb \
+    && docker-php-source delete \
+    && apt-get --assume-yes autoremove \
+    && apt-get clean \
+    && rm -r /var/lib/apt/lists/*

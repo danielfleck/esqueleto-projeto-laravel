@@ -1,0 +1,12 @@
+export DEBIAN_FRONTEND=noninteractive \
+    && set -eux \
+    && apt-get update --no-allow-insecure-repositories \
+    && apt-get install --assume-yes libgraphicsmagick++1-dev libmagickwand-dev \
+    && docker-php-source extract \
+    && mkdir -p /usr/src/php/ext/inotify \
+    && curl -fsSL https://pecl.php.net/get/inotify-3.0.0.tgz | tar xvz -C /usr/src/php/ext/inotify --strip 1 \
+    && docker-php-ext-install -j$(nproc) inotify \
+    && docker-php-source delete \
+    && apt-get --assume-yes autoremove \
+    && apt-get clean \
+    && rm -r /var/lib/apt/lists/*

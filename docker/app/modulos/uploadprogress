@@ -1,0 +1,11 @@
+export DEBIAN_FRONTEND=noninteractive \
+    && set -eux \
+    && apt-get update --no-allow-insecure-repositories \
+    && docker-php-source extract \
+    && mkdir -p /usr/src/php/ext/uplodprogress \
+    && curl -fsSL https://pecl.php.net/get/uploadprogress-2.0.2.tgz | tar xvz -C /usr/src/php/ext/uplodprogress --strip 1 \
+    && docker-php-ext-install -j$(nproc) uplodprogress \
+    && docker-php-source delete \
+    && apt-get --assume-yes autoremove \
+    && apt-get clean \
+    && rm -r /var/lib/apt/lists/*

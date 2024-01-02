@@ -1,0 +1,12 @@
+export DEBIAN_FRONTEND=noninteractive \
+    && set -eux \
+    && apt-get update --no-allow-insecure-repositories \
+    && apt-get install --assume-yes libcmark-dev \
+    && docker-php-source extract \
+    && mkdir -p /usr/src/php/ext/cmark \
+    && curl -fsSL https://pecl.php.net/get/cmark-1.2.0.tgz | tar xvz -C /usr/src/php/ext/cmark --strip 1 \
+    && docker-php-ext-install -j$(nproc) cmark \
+    && docker-php-source delete \
+    && apt-get --assume-yes autoremove \
+    && apt-get clean \
+    && rm -r /var/lib/apt/lists/*
